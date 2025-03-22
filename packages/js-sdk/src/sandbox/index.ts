@@ -1,4 +1,4 @@
-import { createConnectTransport } from '@connectrpc/connect-web'
+import { createConnectTransport } from 'rychlis-connect-web'
 
 import { compareVersions } from 'compare-versions'
 import { components } from '../api'
@@ -107,8 +107,9 @@ export class Sandbox extends SandboxApi {
 
     this.sandboxId = opts.sandboxId
     this.connectionConfig = new ConnectionConfig(opts)
-    this.envdApiUrl = `${this.connectionConfig.debug ? 'http' : 'https'
-      }://${this.getHost(this.envdPort)}`
+    this.envdApiUrl = `${
+      this.connectionConfig.debug ? 'http' : 'https'
+    }://${this.getHost(this.envdPort)}`
 
     const rpcTransport = createConnectTransport({
       baseUrl: this.envdApiUrl,
@@ -243,7 +244,11 @@ export class Sandbox extends SandboxApi {
     sandboxId: string,
     opts?: Omit<SandboxOpts, 'metadata' | 'envs'>
   ): Promise<InstanceType<S>> {
-    await Sandbox.resumeSandbox(sandboxId, opts?.timeoutMs ?? this.defaultSandboxTimeoutMs, opts)
+    await Sandbox.resumeSandbox(
+      sandboxId,
+      opts?.timeoutMs ?? this.defaultSandboxTimeoutMs,
+      opts
+    )
 
     return await this.connect(sandboxId, opts)
   }
@@ -380,7 +385,10 @@ export class Sandbox extends SandboxApi {
    * @returns sandbox ID that can be used to resume the sandbox.
    */
   async pause(opts?: Pick<SandboxOpts, 'requestTimeoutMs'>): Promise<string> {
-    await Sandbox.pauseSandbox(this.sandboxId, { ...this.connectionConfig, ...opts })
+    await Sandbox.pauseSandbox(this.sandboxId, {
+      ...this.connectionConfig,
+      ...opts,
+    })
 
     return this.sandboxId
   }
